@@ -20,10 +20,10 @@ const router = express.Router(); // Create a new router
 router.get('/', (req, res) => { res.send('Server is running'); });
 
 // Route to get device settings
-router.get('/getSettings', getSettings);
+router.post('/getSettings', getSettings);
 
 // Route to get device data
-router.get('/deviceData', getDeviceData);
+router.post('/deviceData', getDeviceData);
 
 // Route to add a new device
 router.post('/addDevice', addDevice);
@@ -32,12 +32,12 @@ router.post('/addDevice', addDevice);
 router.post('/addSensorData', addSensorData);
 
 // Route to send alerts
-router.post('/sendAlert', sendAlert);
+router.get('/sendAlert', sendAlert);
 
 // Route to change the default range settings
-router.put('/changeDefaultRange', changeDefault);
+router.post('/changeDefaultRange', changeDefault);
 
 // Route to change the range settings for a specific device
-router.put('/changeRange', changeDeviceRange);
+router.post('/changeRange', changeDeviceRange);
 
 module.exports = router; // Export the router
