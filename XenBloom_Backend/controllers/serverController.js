@@ -124,6 +124,12 @@ exports.addDevice = async (req, res) => {
     if (!device || !uid) {
       return res.status(400).json({ Error: "Invalid Request" });
     }
+    // Check if the device name is already taken by the same user
+    const userDevicesRef = firestore.collection("users").where('uid', '==', uid).where('devices', 'array-contains', device.name);
+    const userDevicesSnapshot = await userDevicesRef.get();
+    if (!userDevicesSnapshot.empty) {
+      return res.status(400).json({ Error: "Device name already taken by another device of the same user" });
+    }
     device.sensorData = []; // Initialize sensor data as an empty array
     const addedDevice = await addDevice(device); // Add device to database
     const userRef = firestore.collection("users").where('uid', '==', uid); // Reference to user document
