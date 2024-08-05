@@ -119,14 +119,31 @@ exports.changeDeviceRange = async (req, res) => {
  * @param {Response} res - Express response object
  */
 exports.addDevice = async (req, res) => {
-  const device = req.body; // New device data from request body
-  device.sensorData = []; // Initialize sensor data as an empty array
-  if (!device) {
-    return res.status(400).json({ Error: "Invalid Request" });
+  try {
+    const { device, uid } = req.body; // Destructure new device data and user's uid from request body
+    if (!device || !uid) {
+      return res.status(400).json({ Error: "Invalid Request" });
+    }
+    device.sensorData = []; // Initialize sensor data as an empty array
+    const addedDevice = await addDevice(device); // Add device to database
+    const userRef = firestore.collection("users").where('uid', '==', uid); // Reference to user document
+    const userSnapshot = await userRef.get();
+    if (!userSnapshot.empty) {
+      const userDoc = userSnapshot.docs[0].ref; // Get the first matching document's reference
+      // Update user data
+      await userDoc.update({
+        devices: FieldValue.arrayUnion(addedDevice.id)
+      });
+      return res.status(200).json({ message: "Device Added Successfully" });
+    } else {
+      return res.status(404).json({ Error: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error adding device:", error);
+    return res.status(500).json({ Error: "Internal Server Error" });
   }
-  await addDevice(device); // Add device to database
-  return res.status(200).json({ message: "Device Added Successfully" });
 };
+
 
 /**
  * Gets settings for a specific device
