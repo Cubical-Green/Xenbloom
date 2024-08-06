@@ -49,9 +49,8 @@ app.use(express.json()); // Middleware to parse JSON bodies
 app.use(cors()); // Middleware for enabling CORS
 
 
-app.get('/', (req, res)=>{
-  res.send("Server is running");
-});
+// Health check route
+app.get('/', (req, res) => { res.send('Server is running'); });
 
 // Start the Express server on the specified port
 const PORT = 5000;
