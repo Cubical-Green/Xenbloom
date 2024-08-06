@@ -82,6 +82,7 @@ exports.addDevice = async (device) => {
     // Validate the device object against the device schema
     await deviceSchema.validate(device);
      // Add the device to the devices collection in Firestore
+    device.log="hello";
     const dev = await firestore.collection('devices').add(device);
     console.log('Device added successfully');
     return dev;
