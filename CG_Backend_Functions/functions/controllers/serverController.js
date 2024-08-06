@@ -5,7 +5,7 @@
 
 const { FieldValue } = require('firebase-admin/firestore');
 const { firestore } = require('../firebase/firebaseConfig');
-const { addDevice } = require('../firebase/firebaseServices');
+const { addDevice, addSettings  } = require('../firebase/firebaseServices');
 
 /**
  * Gets device data
@@ -124,6 +124,12 @@ exports.addDevice = async (req, res) => {
     if (!device || !uid) {
       return res.status(400).json({ Error: "Invalid Request" });
     }
+    device.sensorData=[]; //empty sensor data list default
+    device.status=true; // default online status
+    if (device.settings!="default"){
+      const setting= await addSettings(device.settings); //if not default settings, add settings to firestore
+      device.settings=setting.id;
+    };
     // Check if the device name is already taken by the same user
     const userDevicesRef = firestore.collection("users").where('uid', '==', uid).where('devices', 'array-contains', device.name);
     const userDevicesSnapshot = await userDevicesRef.get();
