@@ -124,27 +124,26 @@ exports.addDevice = async (req, res) => {
     if (!device || !uid) {
       return res.status(400).json({ Error: "Invalid Request" });
     }
-    device.sensorData=[]; //empty sensor data list default
-    device.status=true; // default online status
-    if (device.settings!="default"){
-      const setting= await addSettings(device.settings); //if not default settings, add settings to firestore
-      device.settings=setting.id;
-    };
-    // Check if the device name is already taken by the same user
-    const userDevicesRef = firestore.collection("users").where('uid', '==', uid).where('devices', 'array-contains', device.name);
-    const userDevicesSnapshot = await userDevicesRef.get();
-    if (!userDevicesSnapshot.empty) {
-      return res.status(400).json({ Error: "Device name already taken by another device of the same user" });
+    device.sensorData = []; // empty sensor data list by default
+    device.status = true; // default online status
+    if (device.settings !== "default") {
+      const setting = await addSettings(device.settings); // if not default settings, add settings to firestore
+      device.settings = setting.id;
     }
-    device.sensorData = []; // Initialize sensor data as an empty array
-    const addedDevice = await addDevice(device); // Add device to database
-    const userRef = firestore.collection("users").where('uid', '==', uid); // Reference to user document
+    // Check if the device name is already taken by the same user
+    const userRef = firestore.collection("users").where('uid', '==', uid);
     const userSnapshot = await userRef.get();
     if (!userSnapshot.empty) {
-      const userDoc = userSnapshot.docs[0].ref; // Get the first matching document's reference
+      const userDoc = userSnapshot.docs[0];
+      const userData = userDoc.data();
+      const deviceExists = userData.devices.some(d => d.name === device.name);
+      if (deviceExists) {
+        return res.status(400).json({ Error: "Device name already taken by another device of the same user" });
+      }
+      const addedDevice = await addDevice(device); // Add device to database
       // Update user data
-      await userDoc.update({
-        devices: FieldValue.arrayUnion(addedDevice.id)
+      await userDoc.ref.update({
+        devices: FieldValue.arrayUnion({ id: addedDevice.id, name: addedDevice.name })
       });
       return res.status(200).json({ message: "Device Added Successfully" });
     } else {
@@ -155,7 +154,6 @@ exports.addDevice = async (req, res) => {
     return res.status(500).json({ Error: "Internal Server Error" });
   }
 };
-
 
 /**
  * Gets settings for a specific device
