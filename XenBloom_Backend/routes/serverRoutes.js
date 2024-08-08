@@ -10,7 +10,8 @@ const {
   changeDefault, 
   changeDeviceRange, 
   getSettings, 
-  addDevice 
+  addDevice,
+  addSchedule
 } = require('../controllers/serverController');
 const { sendAlert } = require('../controllers/notificationController');
 
@@ -20,10 +21,13 @@ const router = express.Router(); // Create a new router
 router.get('/', (req, res) => { res.send('Server is running'); });
 
 // Route to get device settings
-router.post('/getSettings', getSettings);
+router.get('/getSettings', getSettings);
 
 // Route to get device data
-router.post('/deviceData', getDeviceData);
+router.get('/deviceData', getDeviceData);
+
+// Route to add a schedule
+router.post('/addSchedules', addSchedule);
 
 // Route to add a new device
 router.post('/addDevice', addDevice);
@@ -32,12 +36,12 @@ router.post('/addDevice', addDevice);
 router.post('/addSensorData', addSensorData);
 
 // Route to send alerts
-router.get('/sendAlert', sendAlert);
+router.post('/sendAlert', sendAlert);
 
 // Route to change the default range settings
-router.post('/changeDefaultRange', changeDefault);
+router.put('/changeDefaultRange', changeDefault);
 
 // Route to change the range settings for a specific device
-router.post('/changeRange', changeDeviceRange);
+router.put('/changeRange', changeDeviceRange);
 
 module.exports = router; // Export the router
