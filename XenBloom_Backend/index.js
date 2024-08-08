@@ -15,7 +15,7 @@ app.use(express.json()); // Middleware to parse JSON bodies
 app.use(cors()); // Middleware for enabling CORS
 
 // Use the server routes defined in serverRoutes
-app.use('/api', serverRoutes);
+app.use('/', serverRoutes);
 
 // Schedule the cron job to call the processDailyData function at 11:55 PM every day
 cron.schedule('55 23 * * *', () => {
