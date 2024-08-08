@@ -5,7 +5,7 @@
 
 const { FieldValue } = require('firebase-admin/firestore');
 const { firestore } = require('../firebase/firebaseConfig');
-const { addDevice, addSettings  } = require('../firebase/firebaseServices');
+const { addDevice } = require('../firebase/firebaseServices');
 
 /**
  * Gets device data
@@ -119,40 +119,13 @@ exports.changeDeviceRange = async (req, res) => {
  * @param {Response} res - Express response object
  */
 exports.addDevice = async (req, res) => {
-  try {
-    const { device, uid } = req.body; // Destructure new device data and user's uid from request body
-    if (!device || !uid) {
-      return res.status(400).json({ Error: "Invalid Request" });
-    }
-    device.sensorData = []; // empty sensor data list by default
-    device.status = true; // default online status
-    if (device.settings !== "default") {
-      const setting = await addSettings(device.settings); // if not default settings, add settings to firestore
-      device.settings = setting.id;
-    }
-    // Check if the device name is already taken by the same user
-    const userRef = firestore.collection("users").where('uid', '==', uid);
-    const userSnapshot = await userRef.get();
-    if (!userSnapshot.empty) {
-      const userDoc = userSnapshot.docs[0];
-      const userData = userDoc.data();
-      const deviceExists = userData.devices.some(d => d.name === device.name);
-      if (deviceExists) {
-        return res.status(400).json({ Error: "Device name already taken by another device of the same user" });
-      }
-      const addedDevice = await addDevice(device); // Add device to database
-      // Update user data
-      await userDoc.ref.update({
-        devices: FieldValue.arrayUnion({ id: addedDevice.id, name: device.name })
-      });
-      return res.status(200).json({ message: "Device Added Successfully" });
-    } else {
-      return res.status(404).json({ Error: "User not found" });
-    }
-  } catch (error) {
-    console.error("Error adding device:", error);
-    return res.status(500).json({ Error: "Internal Server Error" });
+  const device = req.body; // New device data from request body
+  device.sensorData = []; // Initialize sensor data as an empty array
+  if (!device) {
+    return res.status(400).json({ Error: "Invalid Request" });
   }
+  await addDevice(device); // Add device to database
+  return res.status(200).json({ message: "Device Added Successfully" });
 };
 
 /**
@@ -177,4 +150,15 @@ exports.getSettings = async (req, res) => {
     console.error("Error Getting Settings", error);
     res.status(500).json({ error: "Internal Server" });
   }
+};
+
+exports.addSchedule = async (req, res) => {
+  const schedule = req.body; // New schedule data from request body
+  if (!schedule) {
+    return res.status(400).json({ Error: "Invalid Request" });
+  }
+  schedule.status = false; // Initialize stats as false
+  schedule.time=new Date(schedule.time)
+  await addSchedule(schedule); // Add schedule to database
+  return res.status(200).json({ message: "Scheduled Successfully" });
 };
