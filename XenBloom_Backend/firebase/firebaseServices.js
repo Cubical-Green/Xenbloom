@@ -40,7 +40,6 @@ exports.sendNotification= async (token, message) => {
 exports.addUpdateLog = async (log) => {
   try {
     //await logSchema.validate(log);
-    log.timestamp = new Date();
     // Add the log to the update_log collection in Firestore
     await firestore.collection('update_log').add(log);
     console.log('Log added successfully');
@@ -82,9 +81,8 @@ exports.addDevice = async (device) => {
     // Validate the device object against the device schema
     await deviceSchema.validate(device);
      // Add the device to the devices collection in Firestore
-    const dev = await firestore.collection('devices').add(device);
+    await firestore.collection('devices').add(device);
     console.log('Device added successfully');
-    return dev;
   } catch (error) {
      // Log validation error if it occurs
     console.error('Device validation failed:', error);
