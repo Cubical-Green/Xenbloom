@@ -119,12 +119,13 @@ exports.changeDeviceRange = async (req, res) => {
  * @param {Response} res - Express response object
  */
 exports.addDevice = async (req, res) => {
-  const device = req.body; // New device data from request body
+  const device = req.body.device; // New device data from request body
+  const deviceId= req.body.id; // New device ID from request body
   device.sensorData = []; // Initialize sensor data as an empty array
   if (!device) {
     return res.status(400).json({ Error: "Invalid Request" });
   }
-  await addDevice(device); // Add device to database
+  await addDevice(device, deviceId); // Add device to database
   return res.status(200).json({ message: "Device Added Successfully" });
 };
 
