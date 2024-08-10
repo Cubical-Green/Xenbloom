@@ -9,8 +9,7 @@
  */
 
 exports.aggregator = (data) => {
-    if (data.length === 0) return 0; // Return 0 if there are no values
-    let sumEC = 0;
+    if (data.length === 0) return 0; // Return 0 if there are no value
   let sumTDS = 0;
   let sumPH = 0;
   let sumWaterLevel = 0;
@@ -18,7 +17,6 @@ exports.aggregator = (data) => {
 
   // Loop through the data to calculate sums
   data.forEach(entry => {
-    sumEC += entry.EC;
     sumTDS += entry.TDS;
     sumPH += entry.pH;
     sumWaterLevel += entry.waterLevel;
@@ -26,7 +24,6 @@ exports.aggregator = (data) => {
 
   // Calculate mean values
   const meanValues = {
-    EC: sumEC / count,
     TDS: sumTDS / count,
     pH: sumPH / count,
     waterLevel: sumWaterLevel / count,
