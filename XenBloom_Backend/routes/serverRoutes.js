@@ -11,7 +11,8 @@ const {
   changeDeviceRange, 
   getSettings, 
   addDevice,
-  addSchedule
+  addSchedule,
+  addUser
 } = require('../controllers/serverController');
 const { sendAlert } = require('../controllers/notificationController');
 
@@ -28,6 +29,9 @@ router.get('/deviceData', getDeviceData);
 
 // Route to add a schedule
 router.post('/addSchedules', addSchedule);
+
+// Route to add a user
+router.post("/addUser", addUser)
 
 // Route to add a new device
 router.post('/addDevice', addDevice);
