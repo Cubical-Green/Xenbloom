@@ -58,8 +58,6 @@ exports.addUpdateLog = async (log) => {
  */
 exports.addUser = async (user) => {
   try {
-    // Validate the user object against the user schema
-    await userSchema.validate(user);
     // Add the user to the users collection in Firestore
     await firestore.collection('users').add(user);
     console.log('User added successfully');
