@@ -120,8 +120,8 @@ exports.changeDeviceRange = async (req, res) => {
  */
 exports.addDevice = async (req, res) => {
   try {
-    const { device, uid } = req.body; // Destructure new device data and user's uid from request body
-    if (!device || !uid) {
+    const { deviceId, device, uid } = req.body; // Destructure new device data and user's uid from request body
+    if (!deviceId || !device || !uid) {
       return res.status(400).json({ Error: "Invalid Request" });
     }
     device.sensorData = []; // empty sensor data list by default
@@ -140,7 +140,7 @@ exports.addDevice = async (req, res) => {
       if (deviceExists) {
         return res.status(400).json({ Error: "Device name already taken by another device of the same user" });
       }
-      const addedDevice = await addDevice(device); // Add device to database
+      const addedDevice = await addDevice(device, deviceId); // Add device to database
       // Update user data
       await userDoc.ref.update({
         devices: FieldValue.arrayUnion({ id: addedDevice.id, name: device.name })
@@ -154,6 +154,8 @@ exports.addDevice = async (req, res) => {
     return res.status(500).json({ Error: "Internal Server Error" });
   }
 };
+
+
 
 
 /**
