@@ -88,7 +88,6 @@ exports.addDevice = async (device, deviceId) => {
     console.error('Device validation failed:', error);
   }
 };
-
 /**
  * Adds settings data to the Firestore database.
  *
