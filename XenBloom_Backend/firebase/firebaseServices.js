@@ -76,12 +76,12 @@ exports.addUser = async (user) => {
  * @returns {Promise<void>} - A promise that resolves when the device is added.
  * @throws {Error} - Throws an error if the device validation fails.
  */
-exports.addDevice = async (device) => {
+exports.addDevice = async (device, deviceId) => {
   try {
     // Validate the device object against the device schema
     await deviceSchema.validate(device);
      // Add the device to the devices collection in Firestore
-    await firestore.collection('devices').add(device);
+    await firestore.collection('devices').doc(deviceId).set(device);
     console.log('Device added successfully');
   } catch (error) {
      // Log validation error if it occurs
