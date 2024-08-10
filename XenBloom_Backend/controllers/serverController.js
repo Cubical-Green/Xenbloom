@@ -193,3 +193,14 @@ exports.addSchedule = async (req, res) => {
   await addSchedule(schedule); // Add schedule to database
   return res.status(200).json({ message: "Scheduled Successfully" });
 };
+
+exports.addUser = async (req, res) => {
+  const user = req.body; // New user data from request body
+  if (!user) {
+    return res.status(400).json({ Error: "Invalid Request" });
+  }
+  user.status = true; // Initialize stats as false
+  user.devices=[]
+  await addUser(user); // Add schedule to database
+  return res.status(200).json({ message: "User Added Successfully" });
+};
