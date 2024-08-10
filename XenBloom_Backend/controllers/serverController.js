@@ -124,6 +124,7 @@ exports.addDevice = async (req, res) => {
     if (!deviceId || !device || !uid) {
       return res.status(400).json({ Error: "Invalid Request" });
     }
+    device.lights="false" //lights off by default
     device.sensorData = []; // empty sensor data list by default
     device.status = true; // default online status
     if (device.settings !== "default") {
