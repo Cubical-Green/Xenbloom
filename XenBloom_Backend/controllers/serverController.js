@@ -143,7 +143,7 @@ exports.addDevice = async (req, res) => {
       const addedDevice = await addDevice(device, deviceId); // Add device to database
       // Update user data
       await userDoc.ref.update({
-        devices: FieldValue.arrayUnion({ id: addedDevice.id, name: device.name })
+        devices: FieldValue.arrayUnion({ id: deviceId, name: device.name })
       });
       return res.status(200).json({ message: "Device Added Successfully" });
     } else {
