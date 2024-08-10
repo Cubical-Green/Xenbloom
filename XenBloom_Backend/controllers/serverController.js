@@ -165,19 +165,22 @@ exports.addDevice = async (req, res) => {
  * @param {Response} res - Express response object
  */
 exports.getSettings = async (req, res) => {
-  const { settings } = req.body; // Extract settings ID from request body
-  if (!settings) {
+  const deviceId = req.body.deviceId; // Extract settings ID from request body
+  if (!deviceId) {
     return res.status(400).json({ Error: "Invalid Request" });
   }
   try {
-    const settingsDoc = await firestore.collection("settings").doc(settings).get(); // Fetch settings document
-    if (settingsDoc.exists) {
+    const deviceDoc = await firestore.collection('devices').doc(deviceId).get(); // Fetch device document
+    const deviceData = deviceDoc.data(); // Get device data
+    if (deviceDoc.exists) {
+      const settingsDoc = await firestore.collection("settings").doc(deviceData.settings).get(); // Fetch settings document
+   if (settingsDoc.exists) {
       const data = settingsDoc.data(); // Get settings data
       res.status(200).json({ data }); // Return settings data
     } else {
       return res.status(400).json({ Error: "Device Not Found" });
     }
-  } catch (error) {
+  }}catch (error) {
     console.error("Error Getting Settings", error);
     res.status(500).json({ error: "Internal Server" });
   }
