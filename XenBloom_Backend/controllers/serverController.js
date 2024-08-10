@@ -5,7 +5,7 @@
 
 const { FieldValue } = require('firebase-admin/firestore');
 const { firestore } = require('../firebase/firebaseConfig');
-const { addDevice } = require('../firebase/firebaseServices');
+const { addDevice, addUser, addSchedule, addSettings } = require('../firebase/firebaseServices');
 
 /**
  * Gets device data
