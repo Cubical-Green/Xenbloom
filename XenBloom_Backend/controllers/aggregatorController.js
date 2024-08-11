@@ -23,7 +23,6 @@ const { aggregator } = require("../utils/dataAggregator");
 exports.processDailyData = async () => {
   // Define the start and end of the current day
   const today = new Date();
-  today.setDate(today.getDate() - 1);
   const startOfDay = new Date(today);
   startOfDay.setHours(0, 0, 0, 0);
   const endOfDay = new Date(today);
