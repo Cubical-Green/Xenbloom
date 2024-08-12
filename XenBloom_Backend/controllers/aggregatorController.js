@@ -9,17 +9,6 @@ const { aggregator } = require("../utils/dataAggregator");
  * processDailyData();
  */
 
-const { firestore } = require("../firebase/firebaseConfig");
-const { getCSV } = require("../utils/getDailyDataCSV");
-const { aggregator } = require("../utils/dataAggregator");
-/**
- * Processes daily sensor data for each device, calculates mean values, deletes the old daily data,
- * and saves the aggregated data back to the Firestore. Also generates a CSV file for the day's data.
- *
- * @example
- * processDailyData();
- */
-
 exports.processDailyData = async () => {
   // Define the start and end of the current day
   const today = new Date();
