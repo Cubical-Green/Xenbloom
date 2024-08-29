@@ -165,7 +165,7 @@ exports.addDevice = async (req, res) => {
  * @param {Response} res - Express response object
  */
 exports.getSettings = async (req, res) => {
-  const deviceId = req.body.deviceId; // Extract settings ID from request body
+  const deviceId = req.query.deviceId; // Extract settings ID from request body
   if (!deviceId) {
     return res.status(400).json({ Error: "Invalid Request" });
   }
