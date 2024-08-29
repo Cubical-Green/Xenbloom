@@ -26,7 +26,7 @@ router.get('/', (req, res) => { res.send('Server is running'); });
 // Route to get device settings
 router.get('/getSettings', getSettings);
 
-router.post('/processDailyData', processDailyData)
+router.get('/processDailyData', processDailyData)
 
 // Route to get device data
 router.get('/deviceData', getDeviceData);
