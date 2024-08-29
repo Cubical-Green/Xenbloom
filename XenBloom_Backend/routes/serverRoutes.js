@@ -16,6 +16,8 @@ const {
 } = require('../controllers/serverController');
 const { sendAlert } = require('../controllers/notificationController');
 
+const { processDailyData } = require('../controllers/aggregatorController');
+
 const router = express.Router(); // Create a new router
 
 // Health check route
@@ -23,6 +25,8 @@ router.get('/', (req, res) => { res.send('Server is running'); });
 
 // Route to get device settings
 router.get('/getSettings', getSettings);
+
+router.post(/processDailyData, processDailyData)
 
 // Route to get device data
 router.get('/deviceData', getDeviceData);
