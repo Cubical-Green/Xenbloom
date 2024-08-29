@@ -6,7 +6,6 @@
 const express = require('express');
 const serverRoutes = require('./routes/serverRoutes');
 const cors = require('cors');
-const { processDailyData } = require('./controllers/aggregatorController');
 const cron = require('node-cron');
 const { processSchedules } = require('./utils/processSchedules');
 
@@ -16,12 +15,6 @@ app.use(cors()); // Middleware for enabling CORS
 
 // Use the server routes defined in serverRoutes
 app.use('/', serverRoutes);
-
-// Schedule the cron job to call the processDailyData function at 11:55 PM every day
-cron.schedule('55 23 * * *', () => {
-  processDailyData();
-});
-
 setInterval(processSchedules, 60000); // Run every minute
 
 // Start the Express server on the specified port
