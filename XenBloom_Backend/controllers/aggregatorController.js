@@ -9,7 +9,7 @@ const { aggregator } = require("../utils/dataAggregator");
  * processDailyData();
  */
 
-exports.processDailyData = async () => {
+exports.processDailyData = async (req, res) => {
   // Define the start and end of the current day
   const today = new Date();
   const startOfDay = new Date(today);
@@ -83,7 +83,11 @@ exports.processDailyData = async () => {
 
     await getCSV(todaysData, today);
     console.log(`Data Aggregated Successfully for ${today}`);
+    return res.status(201).send( `Data Aggregated Successfully for ${today}`)
+
+    
   } catch (error) {
     console.error("Error processing daily data:", error);
+    return res.status(501).send("Error processing daily data:", error)
   }
 };
