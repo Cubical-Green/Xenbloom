@@ -124,10 +124,10 @@ exports.addDevice = async (req, res) => {
     if (!deviceId || !device || !uid) {
       return res.status(400).json({ Error: "Invalid Request" });
     }
-    device.lights="false" //lights off by default
     device.sensorData = []; // empty sensor data list by default
     device.status = true; // default online status
     if (device.settings !== "default") {
+       device.settings.lights="false" //lights off by default
       const setting = await addSettings(device.settings); // if not default settings, add settings to firestore
       device.settings = setting.id;
     }
@@ -165,7 +165,7 @@ exports.addDevice = async (req, res) => {
  * @param {Response} res - Express response object
  */
 exports.getSettings = async (req, res) => {
-  const deviceId = req.query.deviceId; // Extract settings ID from request body
+  const deviceId = req.query.deviceId || req.body.deviceId; // Extract settings ID from request body
   if (!deviceId) {
     return res.status(400).json({ Error: "Invalid Request" });
   }
