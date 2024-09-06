@@ -59,7 +59,7 @@ exports.addUpdateLog = async (log) => {
 exports.addUser = async (user) => {
   try {
     // Add the user to the users collection in Firestore
-    await firestore.collection('users').add(user);
+    await firestore.collection('users').doc(user.uid).set(users);
     console.log('User added successfully');
   } catch (error) {
     // Log validation error if it occurs
