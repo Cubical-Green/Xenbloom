@@ -11,11 +11,5 @@
       "src": "/(.*)",
       "dest": "/"
     }
-  ],
-  "crons": [
-    {
-      "path": "/processDailyData",
-      "schedule": "25 18 * * *"
-    }
   ]
 }
