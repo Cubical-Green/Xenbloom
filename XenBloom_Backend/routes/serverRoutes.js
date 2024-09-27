@@ -4,15 +4,18 @@
  */
 
 const express = require('express');
-const { 
-  getDeviceData, 
-  addSensorData, 
-  changeDefault, 
-  changeDeviceRange, 
-  getSettings, 
+const const {
+  getDeviceData,
+  addSensorData,
+  changeDefault,
+  changeDeviceRange,
+  getSettings,
   addDevice,
   addSchedule,
-  addUser
+  addUser,
+  executeScheduledTasks,
+  incPump,
+  lightStatus
 } = require('../controllers/serverController');
 const { sendAlert } = require('../controllers/notificationController');
 
@@ -33,6 +36,15 @@ router.get('/deviceData', getDeviceData);
 
 // Route to add a schedule
 router.post('/addSchedules', addSchedule);
+
+// Route to add a schedule
+router.post('/executeScheduledTasks', executeScheduledTasks);
+
+// Route to lights status
+router.post('/lightStatus', lightStatus);
+
+// Route to increase pump value
+router.post('/incPump', incPump);
 
 // Route to add a user
 router.post("/addUser", addUser)
